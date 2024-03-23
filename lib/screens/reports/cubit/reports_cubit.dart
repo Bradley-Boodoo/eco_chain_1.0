@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_chain/constants.dart';
+import 'package:eco_chain/models/report_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -9,57 +11,52 @@ part 'reports_state.dart';
 class ReportsCubit extends Cubit<ReportsState> {
   ReportsCubit() : super(ReportsInitial());
 
-  List<Widget> buildReportCards(List<String> reportDetailsList) {
-    List<Widget> cards = [];
-    for (int i = 0; i < reportDetailsList.length; i++) {
-      int upVotes = 0; // Counter for up votes
-      int downVotes = 0; // Counter for down votes
-      cards.add(
-        Card(
-          margin: const EdgeInsets.all(8.0),
-          color: kSecondaryColor.withOpacity(0.75),
-          child: ListTile(
-            textColor: kBackgroundColor,
-            iconColor: kBackgroundColor,
-            title: Text(reportDetailsList[i]),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //
+  List<ReportModel> reports = [];
+  List<ReportModel> getReports() {
+    return reports;
+  }
 
-                // Upvotes
-                GestureDetector(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.arrow_drop_up_rounded),
-                      Text('$upVotes'),
-                    ],
-                  ),
-                ),
+  // Fetches Reports from the Firebase Backend
+  Future fetchBackendReports() async {
+    emit(ReportsLoading());
 
-                // Space
-                const SizedBox(width: 8.0),
-
-                //Downvotes
-                GestureDetector(
-                  onTap: () {},
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.arrow_drop_down_rounded),
-                      Text('$downVotes'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+    await FirebaseFirestore.instance.collection('reports').get().then(
+          (snapshot) => snapshot.docs.forEach(
+            (document) {
+              convertBackendReport(document.reference.id);
+            },
           ),
-        ),
-      );
+        );
+
+    emit(ReportsLoaded());
+  }
+
+  // Converts the report IDs to a report
+  Future<void> convertBackendReport(String reportID) async {
+    CollectionReference coll = FirebaseFirestore.instance.collection('reports');
+
+    try {
+      DocumentSnapshot snapshot = await coll.doc(reportID).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        ReportModel report = ReportModel(details: data['reportDetails']);
+        reports.insert(0, report);
+        // Emit your state if necessary
+        // emit(ReportsLoaded(reports)); // Example of emitting a state
+      } else {
+        // Document doesn't exist
+        // Handle the case when the document doesn't exist
+      }
+    } catch (e) {
+      // Handle any errors that might occur
+      print("Error retrieving report: $e");
     }
-    return cards;
+  }
+
+  // Adds Reports to the Firebase Backend
+  Future addBackendReports(String details, int upVotes, int downVotes) async {
+    await FirebaseFirestore.instance.collection('reports').add(
+        {'reportDetails': details, 'upVotes': upVotes, 'downVotes': downVotes});
   }
 
   void showReportModal(BuildContext context) {
@@ -116,6 +113,7 @@ class ReportsCubit extends Cubit<ReportsState> {
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
+      reports.insert(0, ReportModel(details: reportDetails));
       emit(EmailSuccess(reportDetails));
     } else {
       emit(EmailFailed());

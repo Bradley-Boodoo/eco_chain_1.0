@@ -1,6 +1,8 @@
+import 'package:eco_chain/models/report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'components/display_report.dart';
 import 'cubit/reports_cubit.dart';
 import 'package:eco_chain/constants.dart';
 
@@ -29,16 +31,29 @@ class ReportBody extends StatefulWidget {
 }
 
 class _ReportBodyState extends State<ReportBody> {
-  final List<String> _reportDetailsList = [];
-  final List<Widget> _cards = [];
+  List<ReportModel> _reportList = [];
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ReportsCubit>(context).fetchBackendReports();
+
     return BlocListener<ReportsCubit, ReportsState>(
       listener: (context, state) {
+        if (state is ReportsLoading) {
+          Text('Loading...');
+        }
+
+        if (state is ReportsLoaded) {
+          setState(() {
+            _reportList = BlocProvider.of<ReportsCubit>(context).getReports();
+          });
+        }
+
         if (state is EmailSuccess) {
           setState(() {
-            _reportDetailsList.insert(0, state.reportDetails);
+            _reportList = BlocProvider.of<ReportsCubit>(context).getReports();
+            BlocProvider.of<ReportsCubit>(context)
+                .addBackendReports(state.reportDetails, 0, 0);
           });
         }
 
@@ -48,9 +63,11 @@ class _ReportBodyState extends State<ReportBody> {
           );
         }
       },
-      child: ListView(
-        children: BlocProvider.of<ReportsCubit>(context)
-            .buildReportCards(_reportDetailsList),
+      child: ListView.builder(
+        itemCount: _reportList.length,
+        itemBuilder: ((context, index) {
+          return DisplayReport(report: _reportList[index]);
+        }),
       ),
     );
   }

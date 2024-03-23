@@ -5,6 +5,10 @@ sealed class ReportsState {}
 
 final class ReportsInitial extends ReportsState {}
 
+class ReportsLoading extends ReportsState {}
+
+class ReportsLoaded extends ReportsState {}
+
 class EmailSuccess extends ReportsState {
   final String reportDetails;
   EmailSuccess(this.reportDetails);
