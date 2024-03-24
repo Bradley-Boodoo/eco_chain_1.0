@@ -3,8 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 
-import 'package:eco_chain/models/report_model.dart';
-import '../components/singleton.dart';
+import 'package:eco_chain/models/reports/report_model.dart';
+import '../../../models/reports/singleton.dart';
 
 import 'package:eco_chain/constants.dart';
 
