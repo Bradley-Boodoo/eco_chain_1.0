@@ -1,4 +1,3 @@
-import 'package:eco_chain/models/report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,50 +18,6 @@ class ReportScreen extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: ReportBody(),
       ),
-    );
-  }
-}
-
-// class ReportBody extends StatelessWidget {
-//   const ReportBody({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<ReportsCubit, ReportsState>(
-//       builder: (context, state) {
-//         if (state is ReportsLoading) {
-//           return Center(child: CircularProgressIndicator());
-//         }
-
-//         if (state is ReportsLoaded) {
-//           final reportList = context.read<ReportsCubit>().getReports();
-//           return ListView.builder(
-//             itemCount: reportList.length,
-//             itemBuilder: (context, index) {
-//               return DisplayReport(report: reportList[index]);
-//             },
-//           );
-//         }
-
-//         return Container(); // Handle other states if necessary
-//       },
-//     );
-//   }
-// }
-
-class CreateReportButton extends StatelessWidget {
-  const CreateReportButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        BlocProvider.of<ReportsCubit>(context).showReportModal(context);
-      },
-      backgroundColor: kButtonColor,
-      foregroundColor: kSecondaryColor,
-      elevation: 2,
-      child: const Icon(Icons.add),
     );
   }
 }
@@ -90,32 +45,30 @@ class ReportBody extends StatelessWidget {
             },
           );
         }
+
+        if (state is ReportsEmpty) {
+          return const Center(child: Text('No Reports Found'));
+        }
+
         return Container();
       },
     );
   }
 }
 
-class MySingleton {
-  MySingleton._(); // Private constructor
+class CreateReportButton extends StatelessWidget {
+  const CreateReportButton({super.key});
 
-  // Singleton instance
-  static final MySingleton _instance = MySingleton._();
-
-  // Factory method to access the singleton instance
-  factory MySingleton() => _instance;
-
-  // List to store items
-  List<ReportModel> _reports = [];
-
-  // Getter to access the list
-  List<ReportModel> get reports => _reports;
-
-  // Method to get the length of the list
-  int get reportsLength => _reports.length;
-
-  // Method to add item to the list
-  void addItem(ReportModel report) {
-    _reports.insert(0, report);
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        BlocProvider.of<ReportsCubit>(context).showReportModal(context);
+      },
+      backgroundColor: kButtonColor,
+      foregroundColor: kSecondaryColor,
+      elevation: 2,
+      child: const Icon(Icons.add),
+    );
   }
 }
