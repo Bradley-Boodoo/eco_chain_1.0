@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'components/display_report.dart';
 import 'cubit/reports_cubit.dart';
-import 'package:eco_chain/constants.dart';
+import 'package:eco_chain/theme.dart';
 
 class ReportScreen extends StatelessWidget {
   const ReportScreen({super.key});

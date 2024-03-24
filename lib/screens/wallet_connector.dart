@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:flutter_svg/flutter_svg.dart';
 import "package:web3modal_flutter/web3modal_flutter.dart";
 
-import "package:eco_chain/constants.dart";
+import "package:eco_chain/theme.dart";
 
 class WalletConnector extends StatefulWidget {
   const WalletConnector({super.key});

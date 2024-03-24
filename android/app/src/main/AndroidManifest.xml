@@ -2,7 +2,13 @@
     <application
         android:label="eco_chain"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"  
+        android:enableOnBackInvokedCallback="true">
+        
+        <meta-data
+        android:name="android:enableOnBackInvokedCallback"
+        android:value="true" />
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../home/home_screen.dart';
+import '../map/map_screen.dart';
+import '../marketplace/marketplace_screen.dart';
 import '../reports/report_screen.dart';
 import '../transactions/transaction_screen.dart';
 
-import '../../constants.dart';
+import '../../theme.dart';
 
 class NavScreen extends StatefulWidget {
   const NavScreen({super.key});
@@ -19,6 +20,7 @@ class _NavScreenState extends State<NavScreen> {
   final List<Widget> _bodyOptions = <Widget>[
     const HomeScreen(),
     const TransactionScreen(),
+    MapScreen(),
     const ReportScreen(),
   ];
 
@@ -47,19 +49,25 @@ class _NavScreenState extends State<NavScreen> {
       unselectedItemColor: kBackgroundColor,
 
       items: const <BottomNavigationBarItem>[
-        // Home Icon
+        // Marketplace Icon
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.store),
+          label: 'Marketplace',
         ),
 
-        // Bill Icon
+        // Transaction Icon
         BottomNavigationBarItem(
-          icon: Icon(Icons.payment_rounded),
+          icon: Icon(Icons.payment),
           label: 'Transactions',
         ),
 
-        // Account Icon
+        // Map Icon
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map_outlined),
+          label: 'Map',
+        ),
+
+        // Report Icon
         BottomNavigationBarItem(
           icon: Icon(Icons.report),
           label: 'Report',

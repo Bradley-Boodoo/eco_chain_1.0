@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:eco_chain/constants.dart';
+import 'package:eco_chain/theme.dart';
 import 'package:eco_chain/models/reports/report_model.dart';
 
 class DisplayReport extends StatefulWidget {

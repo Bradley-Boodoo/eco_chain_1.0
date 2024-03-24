@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:eco_chain/constants.dart';
+import 'package:eco_chain/theme.dart';
 import 'package:eco_chain/screens/navigation/nav_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -47,10 +47,9 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: kSecondaryColor,
       body: Stack(
         children: [
-          // NavScreen
-          Container(
-            color: kBackgroundColor,
-          ),
+          // NavScreen Background
+          Container(color: kBackgroundColor),
+
           // SplashScreen with FadeTransition
           FadeTransition(
             opacity: _fadeAnimation,
