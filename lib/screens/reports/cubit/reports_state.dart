@@ -12,6 +12,8 @@ class ReportsLoaded extends ReportsState {
   ReportsLoaded({required this.singleton});
 }
 
+class ReportsEmpty extends ReportsState {}
+
 class EmailSuccess extends ReportsState {
   final String reportDetails;
   EmailSuccess(this.reportDetails);
