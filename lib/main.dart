@@ -1,3 +1,4 @@
+import 'package:eco_chain/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: kPrimaryColor,
         ),
-        home: const NavScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

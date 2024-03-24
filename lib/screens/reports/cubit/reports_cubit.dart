@@ -41,6 +41,8 @@ class ReportsCubit extends Cubit<ReportsState> {
           details: data['reportDetails'],
           numUp: data['upVotes'],
           numDown: data['downVotes'],
+          upSelected: data['upSelected'],
+          downSelected: data['downSelected'],
         );
         reports.addItem(report);
 
@@ -52,9 +54,14 @@ class ReportsCubit extends Cubit<ReportsState> {
   }
 
   // Adds Reports to the Firebase Backend
-  Future addBackendReports(String details, int upVotes, int downVotes) async {
-    await FirebaseFirestore.instance.collection('reports').add(
-        {'reportDetails': details, 'upVotes': upVotes, 'downVotes': downVotes});
+  Future addBackendReports(String details) async {
+    await FirebaseFirestore.instance.collection('reports').add({
+      'reportDetails': details,
+      'upSelected': false,
+      'downSelected': false,
+      'upVotes': 0,
+      'downVotes': 0,
+    });
   }
 
   void showReportModal(BuildContext context) {
@@ -112,7 +119,7 @@ class ReportsCubit extends Cubit<ReportsState> {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
 
-      addBackendReports(reportDetails, 0, 0);
+      addBackendReports(reportDetails);
     } else {
       emit(EmailFailed());
     }

@@ -36,7 +36,6 @@ class _DisplayReportState extends State<DisplayReport> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  widget.report.setUpSelected();
                   widget.report.incrUpVotes();
                 });
               },
@@ -68,7 +67,6 @@ class _DisplayReportState extends State<DisplayReport> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  widget.report.setDownSelected();
                   widget.report.incrDownVotes();
                 });
               },
