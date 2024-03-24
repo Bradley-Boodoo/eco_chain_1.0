@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eco_chain/constants.dart';
-import 'package:eco_chain/models/report_model.dart';
-import 'package:eco_chain/screens/reports/report_screen.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import 'package:eco_chain/models/report_model.dart';
+import '../components/singleton.dart';
+
+import 'package:eco_chain/constants.dart';
 
 part 'reports_state.dart';
 
@@ -38,17 +39,11 @@ class ReportsCubit extends Cubit<ReportsState> {
         ReportModel report = ReportModel(details: data['reportDetails']);
         reports.addItem(report);
 
-        // Emit your state if necessary
-        // emit(ReportsLoaded(reports)); // Example of emitting a state
-      } else {
-        // Document doesn't exist
-        // Handle the case when the document doesn't exist
-      }
+        emit(ReportsLoaded(singleton: reports));
+      } else {}
     } catch (e) {
-      // Handle any errors that might occur
       print("Error retrieving report: $e");
     }
-    emit(ReportsLoaded(singleton: reports));
   }
 
   // Adds Reports to the Firebase Backend
@@ -118,5 +113,11 @@ class ReportsCubit extends Cubit<ReportsState> {
     } else {
       emit(EmailFailed());
     }
+  }
+
+  @override
+  Future<void> close() {
+    reports.reports.clear();
+    return super.close();
   }
 }
