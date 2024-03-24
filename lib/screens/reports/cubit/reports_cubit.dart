@@ -36,7 +36,11 @@ class ReportsCubit extends Cubit<ReportsState> {
       DocumentSnapshot snapshot = await coll.doc(reportID).get();
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-        ReportModel report = ReportModel(details: data['reportDetails']);
+        ReportModel report = ReportModel(
+          details: data['reportDetails'],
+          numUp: data['upVotes'],
+          numDown: data['downVotes'],
+        );
         reports.addItem(report);
 
         emit(ReportsLoaded(singleton: reports));
@@ -106,10 +110,14 @@ class ReportsCubit extends Cubit<ReportsState> {
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
-      ReportModel report = ReportModel(details: reportDetails);
+      ReportModel report = ReportModel(
+        details: reportDetails,
+        numUp: 0,
+        numDown: 0,
+      );
       reports.addItem(report);
       emit(ReportsLoaded(singleton: reports));
-      addBackendReports(report.getReportDetails(), 0, 0);
+      addBackendReports(report.reportDetails, 0, 0);
     } else {
       emit(EmailFailed());
     }

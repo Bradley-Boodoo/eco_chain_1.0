@@ -13,11 +13,6 @@ class DisplayReport extends StatefulWidget {
 }
 
 class _DisplayReportState extends State<DisplayReport> {
-  int upVotes = 0; // Counter for up votes
-  int downVotes = 0; // Counter for down votes
-  bool isUpSelected = false;
-  bool isDownSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -27,7 +22,7 @@ class _DisplayReportState extends State<DisplayReport> {
 
       child: ListTile(
         textColor: kBackgroundColor,
-        title: Text(widget.report.getReportDetails()),
+        title: Text(widget.report.reportDetails),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -37,8 +32,8 @@ class _DisplayReportState extends State<DisplayReport> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  isUpSelected = true;
-                  upVotes++;
+                  widget.report.setUpSelected();
+                  widget.report.incrUpVotes();
                 });
               },
               child: Column(
@@ -46,12 +41,16 @@ class _DisplayReportState extends State<DisplayReport> {
                 children: [
                   Icon(
                     Icons.arrow_drop_up_rounded,
-                    color: isUpSelected ? kButtonColor : kBackgroundColor,
+                    color: widget.report.isUpSelected
+                        ? kButtonColor
+                        : kBackgroundColor,
                   ),
                   Text(
-                    '$upVotes',
+                    '${widget.report.upVotes}',
                     style: TextStyle(
-                      color: isUpSelected ? kButtonColor : kBackgroundColor,
+                      color: widget.report.isUpSelected
+                          ? kButtonColor
+                          : kBackgroundColor,
                     ),
                   ),
                 ],
@@ -65,8 +64,8 @@ class _DisplayReportState extends State<DisplayReport> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  isDownSelected = true;
-                  downVotes++;
+                  widget.report.setDownSelected();
+                  widget.report.incrDownVotes();
                 });
               },
               child: Column(
@@ -74,12 +73,16 @@ class _DisplayReportState extends State<DisplayReport> {
                 children: [
                   Icon(
                     Icons.arrow_drop_down_rounded,
-                    color: isDownSelected ? kButtonColor : kBackgroundColor,
+                    color: widget.report.isDownSelected
+                        ? kButtonColor
+                        : kBackgroundColor,
                   ),
                   Text(
-                    '$downVotes',
+                    '${widget.report.downVotes}',
                     style: TextStyle(
-                      color: isDownSelected ? kButtonColor : kBackgroundColor,
+                      color: widget.report.isDownSelected
+                          ? kButtonColor
+                          : kBackgroundColor,
                     ),
                   ),
                 ],
