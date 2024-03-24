@@ -14,6 +14,6 @@ class MySingleton {
 
   // Adds item to the list
   void addItem(ReportModel report) {
-    _reports.insert(0, report);
+    _reports.add(report);
   }
 }

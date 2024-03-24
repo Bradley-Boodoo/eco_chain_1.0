@@ -14,9 +14,6 @@ class ReportsLoaded extends ReportsState {
 
 class ReportsEmpty extends ReportsState {}
 
-class EmailSuccess extends ReportsState {
-  final String reportDetails;
-  EmailSuccess(this.reportDetails);
-}
+class EmailSuccess extends ReportsState {}
 
 class EmailFailed extends ReportsState {}

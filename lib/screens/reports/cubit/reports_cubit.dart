@@ -37,6 +37,7 @@ class ReportsCubit extends Cubit<ReportsState> {
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
         ReportModel report = ReportModel(
+          id: reportID,
           details: data['reportDetails'],
           numUp: data['upVotes'],
           numDown: data['downVotes'],
@@ -110,14 +111,8 @@ class ReportsCubit extends Cubit<ReportsState> {
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
-      ReportModel report = ReportModel(
-        details: reportDetails,
-        numUp: 0,
-        numDown: 0,
-      );
-      reports.addItem(report);
-      emit(ReportsLoaded(singleton: reports));
-      addBackendReports(report.reportDetails, 0, 0);
+
+      addBackendReports(reportDetails, 0, 0);
     } else {
       emit(EmailFailed());
     }

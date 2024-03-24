@@ -46,6 +46,10 @@ class ReportBody extends StatelessWidget {
           );
         }
 
+        if (state is EmailSuccess) {
+          BlocProvider.of<ReportsCubit>(context).fetchBackendReports();
+        }
+
         if (state is ReportsEmpty) {
           return const Center(child: Text('No Reports Found'));
         }
