@@ -23,55 +23,32 @@ class ReportScreen extends StatelessWidget {
   }
 }
 
-class ReportBody extends StatefulWidget {
-  const ReportBody({super.key});
+// class ReportBody extends StatelessWidget {
+//   const ReportBody({super.key});
 
-  @override
-  State<ReportBody> createState() => _ReportBodyState();
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<ReportsCubit, ReportsState>(
+//       builder: (context, state) {
+//         if (state is ReportsLoading) {
+//           return Center(child: CircularProgressIndicator());
+//         }
 
-class _ReportBodyState extends State<ReportBody> {
-  List<ReportModel> _reportList = [];
+//         if (state is ReportsLoaded) {
+//           final reportList = context.read<ReportsCubit>().getReports();
+//           return ListView.builder(
+//             itemCount: reportList.length,
+//             itemBuilder: (context, index) {
+//               return DisplayReport(report: reportList[index]);
+//             },
+//           );
+//         }
 
-  @override
-  Widget build(BuildContext context) {
-    BlocProvider.of<ReportsCubit>(context).fetchBackendReports();
-
-    return BlocListener<ReportsCubit, ReportsState>(
-      listener: (context, state) {
-        if (state is ReportsLoading) {
-          Text('Loading...');
-        }
-
-        if (state is ReportsLoaded) {
-          setState(() {
-            _reportList = BlocProvider.of<ReportsCubit>(context).getReports();
-          });
-        }
-
-        if (state is EmailSuccess) {
-          setState(() {
-            _reportList = BlocProvider.of<ReportsCubit>(context).getReports();
-            BlocProvider.of<ReportsCubit>(context)
-                .addBackendReports(state.reportDetails, 0, 0);
-          });
-        }
-
-        if (state is EmailFailed) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not launch email application')),
-          );
-        }
-      },
-      child: ListView.builder(
-        itemCount: _reportList.length,
-        itemBuilder: ((context, index) {
-          return DisplayReport(report: _reportList[index]);
-        }),
-      ),
-    );
-  }
-}
+//         return Container(); // Handle other states if necessary
+//       },
+//     );
+//   }
+// }
 
 class CreateReportButton extends StatelessWidget {
   const CreateReportButton({super.key});
@@ -87,5 +64,58 @@ class CreateReportButton extends StatelessWidget {
       elevation: 2,
       child: const Icon(Icons.add),
     );
+  }
+}
+
+class ReportBody extends StatelessWidget {
+  const ReportBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    BlocProvider.of<ReportsCubit>(context).fetchBackendReports();
+
+    return BlocBuilder<ReportsCubit, ReportsState>(
+      builder: (context, state) {
+        if (state is ReportsLoading) {
+          return const Center(
+            child: CircularProgressIndicator(color: kSecondaryColor),
+          );
+        }
+
+        if (state is ReportsLoaded) {
+          return ListView.builder(
+            itemCount: state.singleton.reportsLength,
+            itemBuilder: (context, index) {
+              return DisplayReport(report: state.singleton.reports[index]);
+            },
+          );
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class MySingleton {
+  MySingleton._(); // Private constructor
+
+  // Singleton instance
+  static final MySingleton _instance = MySingleton._();
+
+  // Factory method to access the singleton instance
+  factory MySingleton() => _instance;
+
+  // List to store items
+  List<ReportModel> _reports = [];
+
+  // Getter to access the list
+  List<ReportModel> get reports => _reports;
+
+  // Method to get the length of the list
+  int get reportsLength => _reports.length;
+
+  // Method to add item to the list
+  void addItem(ReportModel report) {
+    _reports.insert(0, report);
   }
 }

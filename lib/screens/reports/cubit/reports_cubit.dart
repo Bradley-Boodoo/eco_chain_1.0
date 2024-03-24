@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_chain/constants.dart';
 import 'package:eco_chain/models/report_model.dart';
+import 'package:eco_chain/screens/reports/report_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -11,10 +12,7 @@ part 'reports_state.dart';
 class ReportsCubit extends Cubit<ReportsState> {
   ReportsCubit() : super(ReportsInitial());
 
-  List<ReportModel> reports = [];
-  List<ReportModel> getReports() {
-    return reports;
-  }
+  MySingleton reports = MySingleton();
 
   // Fetches Reports from the Firebase Backend
   Future fetchBackendReports() async {
@@ -22,13 +20,11 @@ class ReportsCubit extends Cubit<ReportsState> {
 
     await FirebaseFirestore.instance.collection('reports').get().then(
           (snapshot) => snapshot.docs.forEach(
-            (document) {
-              convertBackendReport(document.reference.id);
+            (document) async {
+              await convertBackendReport(document.reference.id);
             },
           ),
         );
-
-    emit(ReportsLoaded());
   }
 
   // Converts the report IDs to a report
@@ -40,7 +36,8 @@ class ReportsCubit extends Cubit<ReportsState> {
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
         ReportModel report = ReportModel(details: data['reportDetails']);
-        reports.insert(0, report);
+        reports.addItem(report);
+
         // Emit your state if necessary
         // emit(ReportsLoaded(reports)); // Example of emitting a state
       } else {
@@ -51,6 +48,7 @@ class ReportsCubit extends Cubit<ReportsState> {
       // Handle any errors that might occur
       print("Error retrieving report: $e");
     }
+    emit(ReportsLoaded(singleton: reports));
   }
 
   // Adds Reports to the Firebase Backend
@@ -113,8 +111,10 @@ class ReportsCubit extends Cubit<ReportsState> {
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
-      reports.insert(0, ReportModel(details: reportDetails));
-      emit(EmailSuccess(reportDetails));
+      ReportModel report = ReportModel(details: reportDetails);
+      reports.addItem(report);
+      emit(ReportsLoaded(singleton: reports));
+      addBackendReports(report.getReportDetails(), 0, 0);
     } else {
       emit(EmailFailed());
     }

@@ -7,7 +7,10 @@ final class ReportsInitial extends ReportsState {}
 
 class ReportsLoading extends ReportsState {}
 
-class ReportsLoaded extends ReportsState {}
+class ReportsLoaded extends ReportsState {
+  final MySingleton singleton;
+  ReportsLoaded({required this.singleton});
+}
 
 class EmailSuccess extends ReportsState {
   final String reportDetails;
