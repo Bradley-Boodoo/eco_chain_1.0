@@ -1,17 +1,25 @@
-import 'package:eco_chain/constants.dart';
-import 'package:eco_chain/models/report_model.dart';
 import 'package:flutter/material.dart';
 
-class DisplayReport extends StatelessWidget {
+import 'package:eco_chain/constants.dart';
+import 'package:eco_chain/models/report_model.dart';
+
+class DisplayReport extends StatefulWidget {
   const DisplayReport({super.key, required this.report});
 
   final ReportModel report;
 
   @override
-  Widget build(BuildContext context) {
-    int upVotes = 0; // Counter for up votes
-    int downVotes = 0; // Counter for down votes
+  State<DisplayReport> createState() => _DisplayReportState();
+}
 
+class _DisplayReportState extends State<DisplayReport> {
+  int upVotes = 0; // Counter for up votes
+  int downVotes = 0; // Counter for down votes
+  bool isUpSelected = false;
+  bool isDownSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       //
       margin: const EdgeInsets.all(8.0),
@@ -19,8 +27,7 @@ class DisplayReport extends StatelessWidget {
 
       child: ListTile(
         textColor: kBackgroundColor,
-        iconColor: kBackgroundColor,
-        title: Text(report.getReportDetails()),
+        title: Text(widget.report.getReportDetails()),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -28,12 +35,25 @@ class DisplayReport extends StatelessWidget {
 
             // Upvotes
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  isUpSelected = true;
+                  upVotes++;
+                });
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.arrow_drop_up_rounded),
-                  Text('$upVotes'),
+                  Icon(
+                    Icons.arrow_drop_up_rounded,
+                    color: isUpSelected ? kButtonColor : kBackgroundColor,
+                  ),
+                  Text(
+                    '$upVotes',
+                    style: TextStyle(
+                      color: isUpSelected ? kButtonColor : kBackgroundColor,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -43,12 +63,25 @@ class DisplayReport extends StatelessWidget {
 
             //Downvotes
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  isDownSelected = true;
+                  downVotes++;
+                });
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.arrow_drop_down_rounded),
-                  Text('$downVotes'),
+                  Icon(
+                    Icons.arrow_drop_down_rounded,
+                    color: isDownSelected ? kButtonColor : kBackgroundColor,
+                  ),
+                  Text(
+                    '$downVotes',
+                    style: TextStyle(
+                      color: isDownSelected ? kButtonColor : kBackgroundColor,
+                    ),
+                  ),
                 ],
               ),
             ),
