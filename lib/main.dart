@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       isDarkMode: true,
       themeData: Web3ModalThemeData(
         darkColors: Web3ModalColors.darkMode.copyWith(
-          accent100: kPrimaryColor,
+          accent100: kButtonColor,
           background125: kSecondaryColor,
         ),
       ),

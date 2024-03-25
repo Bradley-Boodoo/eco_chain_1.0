@@ -19,7 +19,11 @@ class ReportsCubit extends Cubit<ReportsState> {
   Future fetchBackendReports() async {
     emit(ReportsLoading());
 
-    await FirebaseFirestore.instance.collection('reports').get().then(
+    await FirebaseFirestore.instance
+        .collection('reports')
+        .orderBy('date', descending: false)
+        .get()
+        .then(
           (snapshot) => snapshot.docs.forEach(
             (document) async {
               await convertBackendReport(document.reference.id);
@@ -38,6 +42,7 @@ class ReportsCubit extends Cubit<ReportsState> {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
         ReportModel report = ReportModel(
           id: reportID,
+          timestamp: data['date'],
           details: data['reportDetails'],
           numUp: data['upVotes'],
           numDown: data['downVotes'],
@@ -54,8 +59,9 @@ class ReportsCubit extends Cubit<ReportsState> {
   }
 
   // Adds Reports to the Firebase Backend
-  Future addBackendReports(String details) async {
+  Future addBackendReports(String details, Timestamp timestamp) async {
     await FirebaseFirestore.instance.collection('reports').add({
+      'date': timestamp,
       'reportDetails': details,
       'upSelected': false,
       'downSelected': false,
@@ -90,7 +96,11 @@ class ReportsCubit extends Cubit<ReportsState> {
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  sendEmail(context, textEditingController.text);
+                  sendEmail(
+                    context,
+                    textEditingController.text,
+                    Timestamp.now(),
+                  );
                   textEditingController.clear();
                 },
                 style: ElevatedButton.styleFrom(
@@ -106,7 +116,11 @@ class ReportsCubit extends Cubit<ReportsState> {
     );
   }
 
-  void sendEmail(BuildContext context, String reportDetails) async {
+  void sendEmail(
+    BuildContext context,
+    String reportDetails,
+    Timestamp timestamp,
+  ) async {
     final Uri uri = Uri(
       scheme: 'mailto',
       path: 'complaints@ema.co.tt', //Environmental Management Authority
@@ -119,7 +133,7 @@ class ReportsCubit extends Cubit<ReportsState> {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
 
-      addBackendReports(reportDetails);
+      addBackendReports(reportDetails, timestamp);
     } else {
       emit(EmailFailed());
     }

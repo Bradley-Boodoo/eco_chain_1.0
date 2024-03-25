@@ -17,6 +17,15 @@ class DisplayReport extends StatefulWidget {
 }
 
 class _DisplayReportState extends State<DisplayReport> {
+  Text printDate() {
+    Timestamp timestamp = widget.report.time;
+    return Text(
+      '${timestamp.toDate().day}-${timestamp.toDate().month}-${timestamp.toDate().year}',
+      style: const TextStyle(
+          fontSize: 12, color: Color.fromARGB(136, 225, 224, 224)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -26,7 +35,13 @@ class _DisplayReportState extends State<DisplayReport> {
 
       child: ListTile(
         textColor: kBackgroundColor,
-        title: Text(widget.report.reportDetails),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            printDate(),
+            Text(widget.report.reportDetails),
+          ],
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

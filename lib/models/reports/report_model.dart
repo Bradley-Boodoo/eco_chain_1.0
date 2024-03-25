@@ -3,10 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ReportModel {
   bool upSelected, downSelected;
   final String id, details;
+  final Timestamp timestamp;
   int numUp, numDown;
 
   ReportModel({
     required this.id,
+    required this.timestamp,
     required this.details,
     required this.numUp,
     required this.numDown,
@@ -15,6 +17,7 @@ class ReportModel {
   });
 
   String get reportID => id;
+  Timestamp get time => timestamp;
   String get reportDetails => details;
   bool get isUpSelected => upSelected;
   bool get isDownSelected => downSelected;

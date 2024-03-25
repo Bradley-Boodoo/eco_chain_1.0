@@ -34,7 +34,7 @@ class _NavScreenState extends State<NavScreen> {
       appBar: AppBar(
         title: SvgPicture.asset(
           'assets/eco_chain_logo_green.svg',
-          height: kToolbarHeight * 1.5,
+          height: kToolbarHeight * 1.8,
         ),
         backgroundColor: kBackgroundColor,
       ),
