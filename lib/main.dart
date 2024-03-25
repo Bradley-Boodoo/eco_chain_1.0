@@ -1,12 +1,11 @@
-import 'package:eco_chain/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
-//import 'screens/wallet_connector.dart';
-import 'theme.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
+import 'package:eco_chain/screens/splash_screen.dart';
+import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,36 +39,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class HomeScreen extends StatelessWidget {
-//   const HomeScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
-//         title: SvgPicture.asset(
-//           'assets/images/green_logo_white_text.svg',
-//           height: kToolbarHeight * 2.5,
-//         ),
-//         actions: [
-//           Row(
-//             children: [
-//               SizedBox(
-//                 height: kToolbarHeight * 3 / 4,
-//                 child: FloatingActionButton.extended(
-//                   onPressed: () {
-//                     // Add your onPressed logic here
-//                   },
-//                   label: const Text('Connect Wallet'),
-//                   icon: const Icon(Icons.wallet),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

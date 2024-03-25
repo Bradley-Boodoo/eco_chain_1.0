@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../map/map_screen.dart';
 import '../marketplace/marketplace_screen.dart';
@@ -20,7 +21,7 @@ class _NavScreenState extends State<NavScreen> {
   final List<Widget> _bodyOptions = <Widget>[
     const HomeScreen(),
     const TransactionScreen(),
-    MapScreen(),
+    const MapScreen(),
     const ReportScreen(),
   ];
 
@@ -28,6 +29,15 @@ class _NavScreenState extends State<NavScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
+
+      // Appbar
+      appBar: AppBar(
+        title: SvgPicture.asset(
+          'assets/eco_chain_logo_green.svg',
+          height: kToolbarHeight * 1.5,
+        ),
+        backgroundColor: kBackgroundColor,
+      ),
 
       // Body
       body: Container(
