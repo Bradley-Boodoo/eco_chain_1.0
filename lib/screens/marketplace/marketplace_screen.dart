@@ -1,3 +1,4 @@
+import 'package:eco_chain/theme.dart';
 import "package:flutter/material.dart";
 
 import 'package:web3modal_flutter/web3modal_flutter.dart';
@@ -48,7 +49,16 @@ class _HomeScreenState extends State<HomeScreen> {
         const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Icon(Icons.construction), Text("Under Construction")],
+            children: [
+              Icon(
+                Icons.construction,
+                color: kSecondaryColor,
+              ),
+              Text(
+                "Under Construction",
+                style: TextStyle(color: kSecondaryColor),
+              )
+            ],
           ),
         ),
       ],
